@@ -2682,7 +2682,7 @@ class PdfFileReader(object):
         :rtype: list
         """
         res = []
-        catalog = self.trailer['/Root']
+        catalog = self._trailer['/Root']
         # get the name tree
         catalog_name = self._get_dict_entry(catalog, '/Names')
         if not catalog_name:
