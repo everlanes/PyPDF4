@@ -1006,6 +1006,15 @@ class PdfFileWriter(object):
 
             pageRef.__setitem__(NameObject('/Contents'), content)
 
+    def removeAttachments(self):
+        """
+        removes attachments from this output.
+
+        """
+        embeddedFilesDictionary = self._rootObject.get("/Names", {})
+        embeddedFilesDictionary.update({
+            NameObject("/EmbeddedFiles"): DictionaryObject()})
+
     def addURI(self, pagenum, uri, rect, border=None):
         """
         Add an URI from a rectangular area to the specified page. This uses the
