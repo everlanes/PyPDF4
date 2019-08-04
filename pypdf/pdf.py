@@ -374,21 +374,20 @@ class PdfFileWriter(object):
         endobj
         
         """
-        embeddedFilesNamesDictionary = DictionaryObject()
-        embeddedFilesNamesDictionary.update({
-            NameObject("/Names"): ArrayObject(
-                [createStringObject(fname), filespec]
-            )
-        })
+        embeddedFilesDictionary = self._rootObject.setdefault(
+                NameObject("/Names"),
+                DictionaryObject())
 
-        embeddedFilesDictionary = DictionaryObject()
-        embeddedFilesDictionary.update({
-            NameObject("/EmbeddedFiles"): embeddedFilesNamesDictionary
-        })
-        # Update the root
-        self._rootObject.update({
-            NameObject("/Names"): embeddedFilesDictionary
-        })
+        embeddedFilesNamesDictionary = embeddedFilesDictionary.setdefault(
+                NameObject("/EmbeddedFiles"),
+                DictionaryObject())
+
+        embeddedFilesList = embeddedFilesNamesDictionary.setdefault(
+                NameObject("/Names"),
+                ArrayObject())
+
+        embeddedFilesList.append(createStringObject(fname))
+        embeddedFilesList.append(filespec)
 
     def appendPagesFromReader(self, reader, afterPageAppend=None):
         """
